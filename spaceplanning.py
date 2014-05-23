@@ -9,7 +9,7 @@ import pylab as plt
 employees,desks = spaceplandata.data()
 numEmployees = len(employees)
 numDesks = len(desks)
-runTests = True
+testing = False
 Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
 pmut = .6 #Probability of mutation
@@ -17,17 +17,14 @@ pop_size = 100 #Population size
 
 
 def run():
-    scores = []
-    for i in range(100):
-        scores.append(simulatedAnnealing()[1])
-    print max(scores), np.var(scores), scores
-
-def runTests():
     ITERS = 1000
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS)
     print pop[pop_size-1]
     plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
     plt.show()
+
+def runTests():
+    pass
 
 # Generates a Random solution
 def randomSolution():
@@ -194,7 +191,7 @@ def sampleDistribution(probs):
 
 
 if __name__ == '__main__':
-    if(runTests):
+    if(testing):
         runTests()
     else:
         run()
