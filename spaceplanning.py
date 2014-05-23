@@ -31,5 +31,31 @@ def evaluateIndividual(indID, deskID):
     deskScore = [desks[deskID]['individualScore'], desks[deskID]['lightScore'], desks[deskID]['loudnessScore']]
     return sum([nu*score for nu,score in zip(prefs, deskScore)])
 
+## Algorithms to Solve #############################################################################
+
+def simulatedAnnealing():
+    s = randomSolution()
+    e = evaluateSolution(s)
+    sbest = s
+    ebest = e
+    k = 0
+    kmax = 1000
+    while k < kmax:
+        T = calculateTemperature(k/kmax)
+        snew = getNeighbor(solution)
+        enew = evaluateSolution(snew)
+        if()
+
+## Calculates the temperature parameter for SA
+def calculateTemperature(nu):
+    Tmax = .3
+    return Tmax*(1-nu)
+
+## Calculates a neighbor by swapping two people's locations and moving someone to a random, empty location
+def getNeighbor(solution):
+
+
+####################################################################################################
+
 if __name__ == '__main__':
     run()
