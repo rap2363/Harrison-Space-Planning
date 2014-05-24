@@ -17,14 +17,32 @@ pop_size = 100 #Population size
 
 
 def run():
-    ITERS = 1000
-    pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS)
-    print pop[pop_size-1]
+    ITERS = 10000
+    pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
+    best = pop[pop_size-1]
+    print 'Score:' +str(best[0])
+    for indID,deskID in best[1].items():
+        print employees[indID]['name']+': '+str(deskID)
     plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
+    plt.show()
+    plt.figure()
+    for i in range(numEmployees):
+        loc = desks[best[1][i]]['location']
+        x,y = loc[0],loc[1]
+        plt.text(x, y, employees[i]['name'], fontsize=8)
+    plt.xlim(0,.7)
+    plt.ylim(0,1)
     plt.show()
 
 def runTests():
-    pass
+    sol0 = randomSolution()
+    sol1 = randomSolution()
+    child = generateChild(sol0, sol1, .3)
+    if(len(set(child.values())) != numEmployees):
+        print 'AAAGH'
+        print child.values()
+        print sol0.values()
+        print sol1.values()
 
 # Generates a Random solution
 def randomSolution():
@@ -36,6 +54,7 @@ def evaluateSolution(solution):
     for indID,deskID in solution.items():
         scores.append(evaluateIndividual(indID, deskID))
     return sum(scores)/numEmployees
+    #return min(scores)
 
 # Evaluates an individual solution
 def evaluateIndividual(indID, deskID):
@@ -46,12 +65,12 @@ def evaluateIndividual(indID, deskID):
 ## Algorithms to Solve #############################################################################
 
 ## Finds the optimal through a genetic algorithm
-def geneticAlgorithm(ITERS):
+def geneticAlgorithm(ITERS, prob_mutation):
     pop = generatePopulation()
     minScores,maxScores,avgScores=[],[],[]
     for k in range(ITERS):
         reproducers = pickReproducingPopulation(pop)
-        offspring = produceOffspring(reproducers)
+        offspring = produceOffspring(reproducers, prob_mutation)
         pop.extend(offspring)
         pop = eugenics(pop, len(pop)-pop_size)
         scores = [p[0] for p in pop]
@@ -61,33 +80,34 @@ def geneticAlgorithm(ITERS):
     return pop, maxScores, minScores, avgScores
 
 ## Produces a number of offspring for a reproducing population
-def produceOffspring(reproducers):
+def produceOffspring(reproducers, prob_mutation):
     random.shuffle(reproducers)
     offspring = []
     for i in range(0, len(reproducers), 2):
         for j in range(numOffspring):
-            child = generateChild(reproducers[i], reproducers[i+1])
+            child = generateChild(reproducers[i][1], reproducers[i+1][1], prob_mutation)
             offspring.append([evaluateSolution(child), child])
     return offspring
 
 ## Generates a child between two consenting parent solutions
-def generateChild(parent0, parent1):
+def generateChild(parent0, parent1, prob_mutation):
     solution = {}
     for i in range(numEmployees):
-        desk0, desk1 = parent0[1][i], parent1[1][i]
+        emptyPlaces = getEmptyDesks(solution.values())
+        desk0, desk1 = parent0[i], parent1[i]
         if(random.random() >= 0.5):
             desk = desk0
             if(desk in solution.values()):
-                desk = desk1
+                desk = random.choice(emptyPlaces)
         else:
             desk = desk1
             if(desk in solution.values()):
-                desk = desk0
+                 desk = random.choice(emptyPlaces)
         solution[i] = desk
     cond = True
     i = 1
     while(cond):
-        if(random.random() < pmut**i):
+        if(random.random() < prob_mutation**i):
             solution = getNeighbor(solution)
             i += 1
         else:
