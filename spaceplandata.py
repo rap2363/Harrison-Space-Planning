@@ -1,25 +1,25 @@
 ## Data for the Space Planning Algorithm
 def data():
     employees = {};
-    employees[0] = {'preferences': [1, .5, -.2], 'name': 'Nick'}
+    employees[0] = {'preferences': [1, .5, -.25], 'name': 'Nick'}
     employees[1] = {'preferences': [1, .4, -1], 'name': 'Jen'}
-    employees[2] = {'preferences': [-1, .7, -1], 'name': 'Michelle'}
+    employees[2] = {'preferences': [-1, .5, -1], 'name': 'Michelle'}
     employees[3] = {'preferences': [1, 0, -1], 'name': 'Fritz'}
-    employees[4] = {'preferences': [1, .2, 0], 'name': 'Freddie'}
-    employees[5] = {'preferences': [1, .5, 0], 'name': 'Augusto'}
+    employees[4] = {'preferences': [1, -1, -.75], 'name': 'Freddie'}
+    employees[5] = {'preferences': [1, .9, 0], 'name': 'Augusto'}
     employees[6] = {'preferences': [1, .5, -1], 'name': 'Marc'}
     employees[7] = {'preferences': [1, .4, 0], 'name': 'Owen'}
-    employees[8] = {'preferences': [1, .8, -.2], 'name': 'Vivian'}
+    employees[8] = {'preferences': [1, 1, -1], 'name': 'Vivian'}
     employees[9] = {'preferences': [1, .6, -.5], 'name': 'Scott'}
-    employees[10] = {'preferences': [1, .5, -.5], 'name': 'Julia'}
-    employees[11] = {'preferences': [1, .5, -.1], 'name': 'Alex'}
+    employees[10] = {'preferences': [1, 1, 0], 'name': 'Julia'}
+    employees[11] = {'preferences': [1, .5, -.5], 'name': 'Alex'}
     employees[12] = {'preferences': [1, .5, -.5], 'name': 'Ryan'}
-    employees[13] = {'preferences': [-1, .4, -.7], 'name': 'Tom'}
+    employees[13] = {'preferences': [1, 1, -1], 'name': 'Tom'}
     employees[14] = {'preferences': [1, .8, -.1], 'name': 'Rohan'}
-    employees[15] = {'preferences': [-1, .5, 0], 'name': 'Sam'}
+    employees[15] = {'preferences': [1, .75, 0.75], 'name': 'Sam'}
     employees[16] = {'preferences': [-1, .5, 0], 'name': 'Connie'}
     employees[17] = {'preferences': [-1, .5, 0], 'name': 'Katherine'}
-    employees[18] = {'preferences': [-1, -.35, 0], 'name': 'Jocelyn'}
+    employees[18] = {'preferences': [1, 1, 0], 'name': 'Jocelyn'}
 
     desks = {}
     desks[0] = {
@@ -178,37 +178,37 @@ def data():
         'lightScore': .7,
         'loudnessScore': .4
     }
-    desks[25] = {
+    desks[26] = {
         'location': [0.33, 0.85],
         'individualScore': -1,
         'lightScore': .7,
         'loudnessScore': .5
     }
-    desks[25] = {
+    desks[27] = {
         'location': [0.23, 0.85],
         'individualScore': -1,
         'lightScore': .7,
         'loudnessScore': .5
     }
-    desks[26] = {
+    desks[28] = {
         'location': [0.58, 0.95],
         'individualScore': 1,
         'lightScore': .7,
         'loudnessScore': .1
     }
-    desks[27] = {
+    desks[29] = {
         'location': [0.58, 0.90],
         'individualScore': 1,
         'lightScore': .7,
         'loudnessScore': .2
     }
-    desks[28] = {
+    desks[30] = {
         'location': [0.58, 0.85],
         'individualScore': 1,
         'lightScore': .3,
         'loudnessScore': .3
     }
-    desks[29] = {
+    desks[31] = {
         'location': [0.58, 0.80],
         'individualScore': 1,
         'lightScore': .3,
