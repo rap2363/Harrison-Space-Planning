@@ -12,12 +12,13 @@ numDesks = len(desks)
 testing = False
 Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
-pmut = .2 #Probability of mutation
+pmut = .6 #Probability of mutation
 pop_size = 100 #Population size
 
 
 def run():
-    ITERS = 1000
+    random.seed(3)
+    ITERS = 10000
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
     print 'Score:' +str(best[0])
