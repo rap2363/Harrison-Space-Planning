@@ -12,12 +12,12 @@ numDesks = len(desks)
 testing = False
 Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
-pmut = .6 #Probability of mutation
+pmut = .2 #Probability of mutation
 pop_size = 100 #Population size
 
 
 def run():
-    ITERS = 10000
+    ITERS = 1000
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
     print 'Score:' +str(best[0])
@@ -35,14 +35,14 @@ def run():
     plt.show()
 
 def runTests():
-    sol0 = randomSolution()
-    sol1 = randomSolution()
-    child = generateChild(sol0, sol1, .3)
-    if(len(set(child.values())) != numEmployees):
-        print 'AAAGH'
-        print child.values()
-        print sol0.values()
-        print sol1.values()
+    ITERS = 10000
+    bestScores = []
+    for pmut in np.arange(0,1,.05):
+        print pmut
+        pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
+        bestScores.append(maxScores[ITERS-1])
+    plt.plot(np.arange(0,1,.05), bestScores)
+    plt.show()
 
 # Generates a Random solution
 def randomSolution():
@@ -54,7 +54,7 @@ def evaluateSolution(solution):
     for indID,deskID in solution.items():
         scores.append(evaluateIndividual(indID, deskID))
     return sum(scores)/numEmployees
-    #return min(scores)
+    #return max(scores)
 
 # Evaluates an individual solution
 def evaluateIndividual(indID, deskID):

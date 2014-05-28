@@ -19,6 +19,8 @@ def data():
     employees[15] = {'preferences': [-1, .5, 0], 'name': 'Sam'}
     employees[16] = {'preferences': [-1, .5, 0], 'name': 'Connie'}
     employees[17] = {'preferences': [-1, .5, 0], 'name': 'Katherine'}
+    employees[18] = {'preferences': [-1, -.35, 0], 'name': 'Jocelyn'}
+
     desks = {}
     desks[0] = {
         'location': [0.2, 0.15],
