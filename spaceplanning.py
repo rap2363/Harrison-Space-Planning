@@ -17,7 +17,7 @@ pop_size = 100 #Population size
 
 
 def run():
-    random.seed(3)
+    random.seed(0)
     ITERS = 10000
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
@@ -125,11 +125,19 @@ def pickReproducingPopulation(pop):
     pop_rep = int(pop_size*.1)
     sortedPop = sorted(pop)
     probs = [(2-b+2.*i*(b-1)/(pop_size-1))/(pop_size) for i in range(pop_size)]
+    #probs = calculateProbs(pop)
     reproducingIndices = pickDistinct(probs, pop_rep)
     reproducers = []
     for i in reproducingIndices:
         reproducers.append(sortedPop[i])
     return reproducers
+
+## Calculates proportional weighted probabilities according to fitness
+def calculateProbs(pop):
+    totalFitness = 0.0
+    for ind in pop:
+        totalFitness += ind[0]
+    return [ind[0]/totalFitness for ind in pop]
 
 ## Generates a population
 def generatePopulation():
