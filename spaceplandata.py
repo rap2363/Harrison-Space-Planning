@@ -1,27 +1,30 @@
 ## Data for the Space Planning Algorithm
 def data():
     employees = {};
-    employees[0] = {'preferences': [1, .5, -.25], 'name': 'Nick'}
-    employees[1] = {'preferences': [1, .8, -.7], 'name': 'Jen'}
-    employees[2] = {'preferences': [-1, .5, -1], 'name': 'Michelle'}
-    employees[3] = {'preferences': [1, 1, -1], 'name': 'Fritz'}
-    employees[4] = {'preferences': [1, -1, -.75], 'name': 'Freddie'}
-    employees[5] = {'preferences': [1, .9, 0], 'name': 'Augusto'}
-    employees[6] = {'preferences': [1, .67, -.6], 'name': 'Marc'}
-    employees[7] = {'preferences': [1, .83, -.34], 'name': 'Owen'}
-    employees[8] = {'preferences': [1, 1, -1], 'name': 'Vivian'}
-    employees[9] = {'preferences': [1, .6, -.5], 'name': 'Scott'}
-    employees[10] = {'preferences': [1, 1, 0], 'name': 'Julia'}
-    employees[11] = {'preferences': [1, .5, -.5], 'name': 'Alex'}
-    employees[12] = {'preferences': [1, 1, 0], 'name': 'Ryan'}
-    employees[13] = {'preferences': [1, 1, -1], 'name': 'Tom'}
-    employees[14] = {'preferences': [1, .8, -.1], 'name': 'Rohan'}
-    employees[15] = {'preferences': [1, .75, 0.75], 'name': 'Sam'}
-    employees[16] = {'preferences': [-1, 1, 0], 'name': 'Connie'}
-    employees[17] = {'preferences': [-1, -.5, 0], 'name': 'Katherine'}
-    employees[18] = {'preferences': [1, 1, 0], 'name': 'Jocelyn'}
-    employees[19] = {'preferences': [1, .4, -.6], 'name': 'Scott'}
-
+    employees[0] = {'preferences': [1, .25, .5, -.25], 'name': 'Nick'}
+    employees[1] = {'preferences': [1, .7, .8, -.7], 'name': 'Jen'}
+    employees[2] = {'preferences': [-1, -1, .5, -1], 'name': 'Michelle'}
+    employees[3] = {'preferences': [1, -1, 1, -1], 'name': 'Fritz'}
+    employees[4] = {'preferences': [1, .31415926, -1, -.75], 'name': 'Freddie'}
+    employees[5] = {'preferences': [1, .75, .4, 0], 'name': 'Augusto'}
+    employees[6] = {'preferences': [1, .5, .67, -.6], 'name': 'Marc'}
+    employees[7] = {'preferences': [1, .5, .83, -.34], 'name': 'Owen'}
+    employees[8] = {'preferences': [1, .5, 1, -1], 'name': 'Vivian'}
+    employees[9] = {'preferences': [1, .4, .6, -.5], 'name': 'Scott'}
+    employees[10] = {'preferences': [1, .5, 1, 0], 'name': 'Julia'}
+    employees[11] = {'preferences': [1, .5, .5, -.5], 'name': 'Alex'}
+    employees[12] = {'preferences': [1, 1, 1, 0], 'name': 'Ryan'}
+    employees[13] = {'preferences': [1, 0, 1, -1], 'name': 'Tom'}
+    employees[14] = {'preferences': [1, 0, .8, -.1], 'name': 'Rohan'}
+    employees[15] = {'preferences': [1, 1, .75, 0.75], 'name': 'Sam'}
+    employees[16] = {'preferences': [-1, -.6, 1, 0], 'name': 'Connie'}
+    employees[17] = {'preferences': [-1, 0.2, -.5, 0], 'name': 'Katherine'}
+    employees[18] = {'preferences': [1, 0, 1, 0], 'name': 'Jocelyn'}
+    teams = [[9, 11, 15, 16, 17, 18],
+             [0, 13],
+             [7, 14],
+             [6, 10, 12],
+             [0, 1, 8]];
     desks = {}
     desks[0] = {
         'location': [0.2, 0.15],
@@ -215,4 +218,4 @@ def data():
         'lightScore': .3,
         'loudnessScore': .4
     }
-    return [employees, desks];
+    return [employees, desks, teams];

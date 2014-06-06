@@ -6,7 +6,7 @@ import numpy as np
 import pylab as plt
 
 
-employees,desks = spaceplandata.data()
+employees,desks, teams = spaceplandata.data()
 numEmployees = len(employees)
 numDesks = len(desks)
 testing = False
@@ -14,13 +14,14 @@ Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
 pmut = .6 #Probability of mutation
 pop_size = 100 #Population size
-
+MAX_DIST_SQUARED = 1.1296
 
 def run():
     random.seed(0)
     ITERS = 10000
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
+    #best[1][13] = 16
     print 'Score:' +str(best[0])
     for indID,deskID in best[1].items():
         print employees[indID]['name']+': '+str(deskID)
@@ -45,23 +46,37 @@ def runTests():
     plt.plot(np.arange(0,1,.05), bestScores)
     plt.show()
 
-# Generates a Random solution
+## Generates a Random solution
 def randomSolution():
     return dict(zip(range(numEmployees),random.sample(range(numDesks), numEmployees)))
 
-# Evaluates a solution
+## Evaluates a solution
 def evaluateSolution(solution):
     scores = []
+    teamScores = []
     for indID,deskID in solution.items():
         scores.append(evaluateIndividual(indID, deskID))
-    return sum(scores)/numEmployees
-    #return max(scores)
+        teamScores.append(evaluateTeamScore(indID, deskID, solution))
+    return (sum(scores)+sum(teamScores))/numEmployees
+    #return min(scores)+min(teamScores)
 
-# Evaluates an individual solution
+## Evaluates an individual solution
 def evaluateIndividual(indID, deskID):
     prefs = employees[indID]['preferences']
+    deskprefs = [prefs[0], prefs[2], prefs[3]]
     deskScore = [desks[deskID]['individualScore'], desks[deskID]['lightScore'], desks[deskID]['loudnessScore']]
-    return sum([nu*score for nu,score in zip(prefs, deskScore)])
+    return sum([nu*score for nu,score in zip(deskprefs, deskScore)])
+
+## Evaluates the individual's team score
+def evaluateTeamScore(indID, deskID, solution):
+    indTeams = [team for team in teams if (indID in team)]
+    totdist = 0
+    for indTeam in indTeams:
+        dist = 0
+        for otherInd in indTeam:
+            dist += squareDistance(desks[deskID]['location'], desks[solution[otherInd]]['location'])
+        totdist += dist/(len(indTeams)*len(indTeam))
+    return employees[indID]['preferences'][1]*(1-2*totdist)
 
 ## Algorithms to Solve #############################################################################
 
@@ -215,6 +230,10 @@ def sampleDistribution(probs):
             numberFound = True
         i+=1
     return number
+
+## Calculates the Euclidean Square Distance
+def squareDistance(point0, point1):
+    return (point0[0]-point1[0])**2 + (point0[1]-point1[1])**2
 
 ####################################################################################################
 
