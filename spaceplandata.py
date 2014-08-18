@@ -1,221 +1,89 @@
 ## Data for the Space Planning Algorithm
 def data():
-    employees = {};
-    employees[0] = {'preferences': [1, .25, .5, -.25], 'name': 'Nick'}
-    employees[1] = {'preferences': [1, .7, .8, -.7], 'name': 'Jen'}
-    employees[2] = {'preferences': [-1, -1, .5, -1], 'name': 'Michelle'}
-    employees[3] = {'preferences': [1, -1, 1, -1], 'name': 'Fritz'}
-    employees[4] = {'preferences': [1, .31415926, -1, -.75], 'name': 'Freddie'}
-    employees[5] = {'preferences': [1, .75, .4, 0], 'name': 'Augusto'}
-    employees[6] = {'preferences': [1, .5, .67, -.6], 'name': 'Marc'}
-    employees[7] = {'preferences': [1, .5, .83, -.34], 'name': 'Owen'}
-    employees[8] = {'preferences': [1, .5, 1, -1], 'name': 'Vivian'}
-    employees[9] = {'preferences': [1, .4, .6, -.5], 'name': 'Scott'}
-    employees[10] = {'preferences': [1, .5, 1, 0], 'name': 'Julia'}
-    employees[11] = {'preferences': [1, .5, .5, -.5], 'name': 'Alex'}
-    employees[12] = {'preferences': [1, 1, 1, 0], 'name': 'Ryan'}
-    employees[13] = {'preferences': [1, 0, 1, -1], 'name': 'Tom'}
-    employees[14] = {'preferences': [1, 0, .8, -.1], 'name': 'Rohan'}
-    employees[15] = {'preferences': [1, 1, .75, 0.75], 'name': 'Sam'}
-    employees[16] = {'preferences': [-1, -.6, 1, 0], 'name': 'Connie'}
-    employees[17] = {'preferences': [-1, 0.2, -.5, 0], 'name': 'Katherine'}
-    employees[18] = {'preferences': [1, 0, 1, 0], 'name': 'Jocelyn'}
-    teams = [[9, 11, 15, 16, 17, 18],
-             [0, 13],
-             [7, 14],
-             [6, 10, 12],
-             [0, 1, 8]];
+    employees = {}
+    employees['Jen']        = addEmployee(.70,  .4,  -.5, .67, .60)
+    employees['Nick']       = addEmployee(.25,   0,  -.5,  .4, .50)
+    employees['Fritz']      = addEmployee( -1,   1,   -1, -.5, .40)
+    employees['Augusto']    = addEmployee(.75,  .2,    0,  .5, .25)
+    employees['Owen']       = addEmployee(.50, .91,    0,   0, .80)
+    employees['Vivian']     = addEmployee(.50,   1,    1,  .3, .30)
+    employees['Scott']      = addEmployee(.40,   0,  -.5,  .2, .65)
+    employees['Julia']      = addEmployee( .5,  .5,    0,  .9, .60)
+    employees['Jocelyn']    = addEmployee(  0,   1,    0,  .8, .80)
+    employees['Ryan']       = addEmployee(  1,   1,    0, .25,   0)
+    employees['Tom']        = addEmployee(  0,  .5,   -1,  .7, .70)
+    employees['Rohan']      = addEmployee(  0,  .8,  -.1, .25, .70)
+    employees['Autumn']     = addEmployee(.25,   1,    0,  .7, .40)
+    employees['Eric']       = addEmployee(  0,  .3,  -.5, .25, .80)
+    employees['Kate']       = addEmployee(.25,   1,  -.8,  .5, .70)
+    employees['Katie']      = addEmployee(.25, -.4,    0,  .2, .50)
+    employees['Daishi']     = addEmployee(.25,  .4,  -.2,  .3, .80)
+    employees['Chris']      = addEmployee(.25,   1,   -1,  .5, .60)
+    employees['Morgan']     = addEmployee(  0,   1,  -.8,  .8, .60)
+    employees['Turner']     = addEmployee(.25,  .3,  -.4,  .4, .60)
+    employees['Andrew']     = addEmployee(.25,   1,  -.8,  .3, .60)
+    employees['Teddy']      = addEmployee(.25,  .5, -.25, .25, .70)
+    employees['Aki']        = addEmployee(1,     0,  -.5,  .5,  .6)
+    employees['AE2']        = addEmployee(1,     0,  -.5,  .5,  .6)
+    employees['BD']         = addEmployee(1,     0,  -.5,  .5,  .6)
+    employees['ENG1']       = addEmployee(1,     0,  -.5,  .5,  .6)
+    employees['ENG2']       = addEmployee(1,     0,  -.5,  .5,  .6)
+    employees['PD']         = addEmployee(1,     0,  -.5,  .5,  .6)
+
     desks = {}
-    desks[0] = {
-        'location': [0.2, 0.15],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .7
+    teams = [['Fritz', 'Augusto', 'Owen', 'Daishi', 'Andrew', 'Teddy'], # BE
+             ['Rohan', 'Turner', 'AE2', 'BD'], # App Eng
+             ['Owen', 'Rohan', 'ENG1'], # API
+             ['Scott', 'Jocelyn', 'Kate', 'Chris', 'Katie', 'ENG2'], # Metro
+             ['Vivian', 'Morgan', 'Chris', 'Ryan'], # Product
+             ['Nick', 'Jen', 'Tom', 'Andrew'], # Leadership
+             ['Eric', 'Ryan', 'Julia', 'Jen', 'Aki', 'PD'] # Maker Tools
+            ]
+
+    desks[0]  = addDesk([.18, .91], .0, .0, .5)
+    desks[1]  = addDesk([.24, .91], .2, .0, .3)
+    desks[2]  = addDesk([.35, .91], .2, .2, .5)
+    desks[3]  = addDesk([.42, .91], .2, .5, .3)
+    desks[4]  = addDesk([.18, .86], .5, .3, .6)
+    desks[5]  = addDesk([.24, .86], .5, .3, .6)
+    desks[6]  = addDesk([.35, .86], .5, .4, .6)
+    desks[7]  = addDesk([.42, .86], .4, .5, .4)
+    desks[8]  = addDesk([.45, .75], .7, .5, .5)
+    desks[9]  = addDesk([.51, .75], .5, .6, .3)
+    desks[10] = addDesk([.45, .66], .7, .5, .5)
+    desks[11] = addDesk([.51, .66], .5, .4, .3)
+    desks[12] = addDesk([.51, .59], .5, .4, .5)
+    desks[13] = addDesk([.45, .54], .6, .5, .6)
+    desks[14] = addDesk([.51, .54], .4, .4, .3)
+    desks[15] = addDesk([.45, .46], .5, .5, .6)
+    desks[16] = addDesk([.51, .46], .4, .4, .2)
+    desks[17] = addDesk([.26, .32], .6, .7, .5)
+    desks[18] = addDesk([.35, .32], .6, .7, .7)
+    desks[19] = addDesk([.40, .32], .6, .7, .5)
+    desks[20] = addDesk([.12, .30], .4, .7, .5)
+    desks[21] = addDesk([.26, .27], .3, .8, .4)
+    desks[22] = addDesk([.35, .27], .3, .8, .4)
+    desks[23] = addDesk([.40, .27], .4, .8, .5)
+    desks[24] = addDesk([.55, .24], .5, .8, .5)
+    desks[25] = addDesk([.55, .17], .6, .8, .4)
+    desks[26] = addDesk([.55, .11], .6, .8, .2)
+    desks[27] = addDesk([.48, .40], .4, .4, .3)
+    desks[28] = addDesk([.10, .20], .3, .3, .3)
+
+    return [employees, desks, teams]
+
+def addEmployee(team, sunlight, noise, heatScore, atDeskLikelihood):
+    return {
+    'preferences': {
+        'individualScore': 1, 'lightScore': sunlight, 'loudnessScore': noise, 'heatScore': heatScore
+        },
+    'atDeskLikelihood': atDeskLikelihood
     }
-    desks[1] = {
-        'location': [0.25, 0.19],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .6
+
+def addDesk(location, lightScore, loudnessScore, heatScore):
+    return {
+    'location': location,
+    'preferences': {
+        'lightScore': lightScore, 'loudnessScore': loudnessScore, 'heatScore': heatScore
+        }
     }
-    desks[2] = {
-        'location': [0.32, 0.19],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .6
-    }
-    desks[3] = {
-        'location': [0.38, 0.19],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .5
-    }
-    desks[4] = {
-        'location': [0.45, 0.15],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .4
-    }
-    desks[5] = {
-        'location': [0.38, 0.12],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .5
-    }
-    desks[6] = {
-        'location': [0.32, 0.12],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .6
-    }
-    desks[7] = {
-        'location': [0.25, 0.12],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .6
-    }
-    desks[8] = {
-        'location': [0.53, 0.1],
-        'individualScore': 1,
-        'lightScore': .2,
-        'loudnessScore': .3
-    }
-    desks[9] = {
-        'location': [0.53, 0.17],
-        'individualScore': 1,
-        'lightScore': .2,
-        'loudnessScore': .3
-    }
-    desks[10] = {
-        'location': [0.53, 0.25],
-        'individualScore': 1,
-        'lightScore': .2,
-        'loudnessScore': .3
-    }
-    desks[11] = {
-        'location': [0.28, .35],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .5
-    }
-    desks[12] = {
-        'location': [0.34, .35],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .5
-    }
-    desks[13] = {
-        'location': [0.41, .35],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .5
-    }
-    desks[14] = {
-        'location': [0.48, .31],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .6
-    }
-    desks[15] = {
-        'location': [0.41, 0.27],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .5
-    }
-    desks[16] = {
-        'location': [0.34, 0.27],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .5
-    }
-    desks[17] = {
-        'location': [0.28, 0.27],
-        'individualScore': 1,
-        'lightScore': .5,
-        'loudnessScore': .5
-    }
-    desks[18] = {
-        'location': [0.45, 0.44],
-        'individualScore': 1,
-        'lightScore': .9,
-        'loudnessScore': .7
-    }
-    desks[19] = {
-        'location': [0.45, 0.51],
-        'individualScore': 1,
-        'lightScore': .9,
-        'loudnessScore': .7
-    }
-    desks[20] = {
-        'location': [0.51, 0.51],
-        'individualScore': 1,
-        'lightScore': .8,
-        'loudnessScore': .8
-    }
-    desks[21] = {
-        'location': [0.51, 0.44],
-        'individualScore': 1,
-        'lightScore': .8,
-        'loudnessScore': .8
-    }
-    desks[22] = {
-        'location': [0.19, 0.92],
-        'individualScore': -1,
-        'lightScore': .6,
-        'loudnessScore': .5
-    }
-    desks[23] = {
-        'location': [0.28, 0.92],
-        'individualScore': -1,
-        'lightScore': .6,
-        'loudnessScore': .5
-    }
-    desks[24] = {
-        'location': [0.38, 0.92],
-        'individualScore': -1,
-        'lightScore': .6,
-        'loudnessScore': .4
-    }
-    desks[25] = {
-        'location': [0.42, 0.85],
-        'individualScore': -1,
-        'lightScore': .7,
-        'loudnessScore': .4
-    }
-    desks[26] = {
-        'location': [0.33, 0.85],
-        'individualScore': -1,
-        'lightScore': .7,
-        'loudnessScore': .5
-    }
-    desks[27] = {
-        'location': [0.23, 0.85],
-        'individualScore': -1,
-        'lightScore': .7,
-        'loudnessScore': .5
-    }
-    desks[28] = {
-        'location': [0.58, 0.95],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .1
-    }
-    desks[29] = {
-        'location': [0.58, 0.90],
-        'individualScore': 1,
-        'lightScore': .7,
-        'loudnessScore': .2
-    }
-    desks[30] = {
-        'location': [0.58, 0.85],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .3
-    }
-    desks[31] = {
-        'location': [0.58, 0.80],
-        'individualScore': 1,
-        'lightScore': .3,
-        'loudnessScore': .4
-    }
-    return [employees, desks, teams];

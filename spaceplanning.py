@@ -3,7 +3,7 @@ import spaceplandata
 import math
 import random
 import numpy as np
-import pylab as plt
+#import pylab as plt
 
 
 employees,desks, teams = spaceplandata.data()
@@ -14,27 +14,26 @@ Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
 pmut = .6 #Probability of mutation
 pop_size = 100 #Population size
+ITERS = 5000
 MAX_DIST_SQUARED = 1.1296
 
 def run():
-    random.seed(0)
-    ITERS = 10000
+    random.seed(1)
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
-    #best[1][13] = 16
     print 'Score:' +str(best[0])
-    for indID,deskID in best[1].items():
-        print employees[indID]['name']+': '+str(deskID)
-    plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
-    plt.show()
-    plt.figure()
-    for i in range(numEmployees):
-        loc = desks[best[1][i]]['location']
-        x,y = loc[0],loc[1]
-        plt.text(x, y, employees[i]['name'], fontsize=8)
-    plt.xlim(0,.7)
-    plt.ylim(0,1)
-    plt.show()
+    for deskID, name in sorted(zip(best[1].values(), best[1].keys())):
+        print str(deskID)+': '+name +',' +str(evaluateIndividualPreAtDesk(name, deskID))+', '+str(evaluateIndividual(name, deskID))
+    # plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
+    # plt.show()
+    # plt.figure()
+    # for i in range(numEmployees):
+    #     loc = desks[best[1][i]]['location']
+    #     x,y = loc[0],loc[1]
+    #     plt.text(x, y, employees[i]['name'], fontsize=8)
+    # plt.xlim(0,.7)
+    # plt.ylim(0,1)
+    # plt.show()
 
 def runTests():
     ITERS = 10000
@@ -48,25 +47,48 @@ def runTests():
 
 ## Generates a Random solution
 def randomSolution():
-    return dict(zip(range(numEmployees),random.sample(range(numDesks), numEmployees)))
+    return dict(zip(employees.keys(),random.sample(range(numDesks), numEmployees)))
 
 ## Evaluates a solution
 def evaluateSolution(solution):
     scores = []
     teamScores = []
-    for indID,deskID in solution.items():
+    for indID, deskID in solution.items():
         scores.append(evaluateIndividual(indID, deskID))
         teamScores.append(evaluateTeamScore(indID, deskID, solution))
+    #worstTeamScore = evaluateWorstTeamScore(solution)
+    #return sum(scores)/numEmployees + worstTeamScore
     return (sum(scores)+sum(teamScores))/numEmployees
     #return min(scores)+min(teamScores)
 
 ## Evaluates an individual solution
-def evaluateIndividual(indID, deskID):
-    prefs = employees[indID]['preferences']
-    deskprefs = [prefs[0], prefs[2], prefs[3]]
-    deskScore = [desks[deskID]['individualScore'], desks[deskID]['lightScore'], desks[deskID]['loudnessScore']]
+def evaluateIndividual(name, deskID):
+    prefs = employees[name]['preferences']
+    deskprefs = [prefs['lightScore'], prefs['loudnessScore'], prefs['heatScore']]
+    deskparams = desks[deskID]['preferences']
+    deskScore = [deskparams['lightScore'], deskparams['loudnessScore'], deskparams['heatScore']]
+    return employees[name]['atDeskLikelihood']*sum([nu*score for nu,score in zip(deskprefs, deskScore)])
+
+## Evaluates an individual solution
+def evaluateIndividualPreAtDesk(name, deskID):
+    prefs = employees[name]['preferences']
+    deskprefs = [prefs['lightScore'], prefs['loudnessScore'], prefs['heatScore']]
+    deskparams = desks[deskID]['preferences']
+    deskScore = [deskparams['lightScore'], deskparams['loudnessScore'], deskparams['heatScore']]
     return sum([nu*score for nu,score in zip(deskprefs, deskScore)])
 
+## Evaluates the worst team score (i.e. the furthest distance in a team)
+def evaluateWorstTeamScore(solution):
+    totalMaxDist = 0
+    for team in teams:
+        maxDist = -1
+        for i in range(len(team)):
+            for j in range(i+1, len(team)):
+                dist = squareDistance(desks[solution[team[i]]]['location'], desks[solution[team[j]]]['location'])
+                if(dist > maxDist):
+                    maxDist = dist
+        totalMaxDist += maxDist/len(teams)
+    return -totalMaxDist/MAX_DIST_SQUARED
 ## Evaluates the individual's team score
 def evaluateTeamScore(indID, deskID, solution):
     indTeams = [team for team in teams if (indID in team)]
@@ -75,8 +97,9 @@ def evaluateTeamScore(indID, deskID, solution):
         dist = 0
         for otherInd in indTeam:
             dist += squareDistance(desks[deskID]['location'], desks[solution[otherInd]]['location'])
-        totdist += dist/(len(indTeams)*len(indTeam))
-    return employees[indID]['preferences'][1]*(1-2*totdist)
+        #totdist += dist/(len(indTeams)*len(indTeam))
+        totdist += dist
+    return employees[indID]['preferences']['individualScore']*(1-2*totdist)
 
 ## Algorithms to Solve #############################################################################
 
@@ -108,7 +131,7 @@ def produceOffspring(reproducers, prob_mutation):
 ## Generates a child between two consenting parent solutions
 def generateChild(parent0, parent1, prob_mutation):
     solution = {}
-    for i in range(numEmployees):
+    for i in employees.keys():
         emptyPlaces = getEmptyDesks(solution.values())
         desk0, desk1 = parent0[i], parent1[i]
         if(random.random() >= 0.5):
@@ -164,35 +187,35 @@ def generatePopulation():
     return pop
 
 # Finds the optimal through simulated annealing
-def simulatedAnnealing():
-    solution = randomSolution()
-    e = evaluateSolution(solution)
-    k = 0
-    kmax = 10000
-    while k < kmax:
-        T = calculateTemperature(k/kmax)
-        solutionNew = getNeighbor(solution)
-        enew = evaluateSolution(solutionNew)
-        delE = enew - e
-        if(boltzmann(delE, T) > random.random()):
-            solution, e = solutionNew, enew
-        k += 1
-    return solution, e
+# def simulatedAnnealing():
+#     solution = randomSolution()
+#     e = evaluateSolution(solution)
+#     k = 0
+#     kmax = 10000
+#     while k < kmax:
+#         T = calculateTemperature(k/kmax)
+#         solutionNew = getNeighbor(solution)
+#         enew = evaluateSolution(solutionNew)
+#         delE = enew - e
+#         if(boltzmann(delE, T) > random.random()):
+#             solution, e = solutionNew, enew
+#         k += 1
+#     return solution, e
 
-## Calculates the temperature parameter for SA
-def calculateTemperature(nu):
-    return Tmax*(1-nu)**2
+# ## Calculates the temperature parameter for SA
+# def calculateTemperature(nu):
+#     return Tmax*(1-nu)**2
 
-## Calculates the Boltzmannn distribution probability
-def boltzmann(x, T):
-    return 1/(1+math.exp(-(x/T)))
+# ## Calculates the Boltzmannn distribution probability
+# def boltzmann(x, T):
+#     return 1/(1+math.exp(-(x/T)))
 
 ## Calculates a neighbor by swapping two people's locations and moving someone to a random, empty location
 def getNeighbor(solution):
-    n1,n2 = random.sample(range(numEmployees), 2)
+    n1,n2 = random.sample(employees.keys(), 2)
     solution[n1], solution[n2] = solution[n2], solution[n1]
     emptyPlaces = getEmptyDesks(solution.values())
-    nmove = random.choice(range(numEmployees))
+    nmove = random.choice(employees.keys())
     solution[nmove] = random.choice(emptyPlaces)
     return solution
 
