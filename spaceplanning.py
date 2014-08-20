@@ -3,46 +3,35 @@ import spaceplandata
 import math
 import random
 import numpy as np
-#import pylab as plt
+import pylab as plt
 
 
 employees,desks, teams = spaceplandata.data()
 numEmployees = len(employees)
 numDesks = len(desks)
-testing = False
 Tmax = 6
 numOffspring = 2 ## Number of offspring to produce per couple
-pmut = .6 #Probability of mutation
+pmut = .3 #Probability of mutation
 pop_size = 100 #Population size
-ITERS = 5000
+ITERS = 10000
 MAX_DIST_SQUARED = 1.1296
 
 def run():
-    random.seed(1)
+    random.seed(15)
     pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
     best = pop[pop_size-1]
     print 'Score:' +str(best[0])
     for deskID, name in sorted(zip(best[1].values(), best[1].keys())):
         print str(deskID)+': '+name +',' +str(evaluateIndividualPreAtDesk(name, deskID))+', '+str(evaluateIndividual(name, deskID))
-    # plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
-    # plt.show()
-    # plt.figure()
-    # for i in range(numEmployees):
-    #     loc = desks[best[1][i]]['location']
-    #     x,y = loc[0],loc[1]
-    #     plt.text(x, y, employees[i]['name'], fontsize=8)
-    # plt.xlim(0,.7)
-    # plt.ylim(0,1)
-    # plt.show()
-
-def runTests():
-    ITERS = 10000
-    bestScores = []
-    for pmut in np.arange(0,1,.05):
-        print pmut
-        pop, maxScores, minScores, avgScores = geneticAlgorithm(ITERS, pmut)
-        bestScores.append(maxScores[ITERS-1])
-    plt.plot(np.arange(0,1,.05), bestScores)
+    plt.plot(range(ITERS), avgScores, range(ITERS), maxScores, range(ITERS), minScores)
+    plt.show()
+    plt.figure()
+    for name, deskID in best[1].items():
+        loc = desks[deskID]['location']
+        x,y = loc[0],loc[1]
+        plt.text(x, y, name, fontsize=8)
+    plt.xlim(0,.7)
+    plt.ylim(0,1)
     plt.show()
 
 ## Generates a Random solution
@@ -56,8 +45,8 @@ def evaluateSolution(solution):
     for indID, deskID in solution.items():
         scores.append(evaluateIndividual(indID, deskID))
         teamScores.append(evaluateTeamScore(indID, deskID, solution))
-    #worstTeamScore = evaluateWorstTeamScore(solution)
-    #return sum(scores)/numEmployees + worstTeamScore
+    # worstTeamScore = evaluateWorstTeamScore(solution)
+    # return sum(scores)/numEmployees + worstTeamScore
     return (sum(scores)+sum(teamScores))/numEmployees
     #return min(scores)+min(teamScores)
 
@@ -110,6 +99,8 @@ def geneticAlgorithm(ITERS, prob_mutation):
     for k in range(ITERS):
         reproducers = pickReproducingPopulation(pop)
         offspring = produceOffspring(reproducers, prob_mutation)
+        for i in range(10):
+            offspring.append(randomSolution())
         pop.extend(offspring)
         pop = eugenics(pop, len(pop)-pop_size)
         scores = [p[0] for p in pop]
@@ -146,7 +137,7 @@ def generateChild(parent0, parent1, prob_mutation):
     cond = True
     i = 1
     while(cond):
-        if(random.random() < prob_mutation**i):
+        if(random.random() < prob_mutation):
             solution = getNeighbor(solution)
             i += 1
         else:
@@ -162,8 +153,8 @@ def pickReproducingPopulation(pop):
     b = 2
     pop_rep = int(pop_size*.1)
     sortedPop = sorted(pop)
-    probs = [(2-b+2.*i*(b-1)/(pop_size-1))/(pop_size) for i in range(pop_size)]
-    #probs = calculateProbs(pop)
+    #probs = [(2-b+2.*i*(b-1)/(pop_size-1))/(pop_size) for i in range(pop_size)]
+    probs = calculateProbs(pop)
     reproducingIndices = pickDistinct(probs, pop_rep)
     reproducers = []
     for i in reproducingIndices:
@@ -185,30 +176,6 @@ def generatePopulation():
         score = evaluateSolution(sol)
         pop.append([score, sol])
     return pop
-
-# Finds the optimal through simulated annealing
-# def simulatedAnnealing():
-#     solution = randomSolution()
-#     e = evaluateSolution(solution)
-#     k = 0
-#     kmax = 10000
-#     while k < kmax:
-#         T = calculateTemperature(k/kmax)
-#         solutionNew = getNeighbor(solution)
-#         enew = evaluateSolution(solutionNew)
-#         delE = enew - e
-#         if(boltzmann(delE, T) > random.random()):
-#             solution, e = solutionNew, enew
-#         k += 1
-#     return solution, e
-
-# ## Calculates the temperature parameter for SA
-# def calculateTemperature(nu):
-#     return Tmax*(1-nu)**2
-
-# ## Calculates the Boltzmannn distribution probability
-# def boltzmann(x, T):
-#     return 1/(1+math.exp(-(x/T)))
 
 ## Calculates a neighbor by swapping two people's locations and moving someone to a random, empty location
 def getNeighbor(solution):
@@ -262,7 +229,4 @@ def squareDistance(point0, point1):
 
 
 if __name__ == '__main__':
-    if(testing):
-        runTests()
-    else:
-        run()
+    run()

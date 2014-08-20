@@ -37,7 +37,8 @@ def data():
              ['Scott', 'Jocelyn', 'Kate', 'Chris', 'Katie', 'ENG2'], # Metro
              ['Vivian', 'Morgan', 'Chris', 'Ryan'], # Product
              ['Nick', 'Jen', 'Tom', 'Andrew'], # Leadership
-             ['Eric', 'Ryan', 'Julia', 'Jen', 'Aki', 'PD'] # Maker Tools
+             ['Eric', 'Ryan', 'Julia', 'Jen', 'Aki', 'PD', 'Scott'], # Maker Tools
+             ['Autumn', 'Tom', 'Ryan'] # Office Administration
             ]
 
     desks[0]  = addDesk([.18, .91], .0, .0, .5)
@@ -52,7 +53,7 @@ def data():
     desks[9]  = addDesk([.51, .75], .5, .6, .3)
     desks[10] = addDesk([.45, .66], .7, .5, .5)
     desks[11] = addDesk([.51, .66], .5, .4, .3)
-    desks[12] = addDesk([.51, .59], .5, .4, .5)
+    desks[12] = addDesk([.49, .78], .7, .6, .5)
     desks[13] = addDesk([.45, .54], .6, .5, .6)
     desks[14] = addDesk([.51, .54], .4, .4, .3)
     desks[15] = addDesk([.45, .46], .5, .5, .6)
@@ -60,7 +61,7 @@ def data():
     desks[17] = addDesk([.26, .32], .6, .7, .5)
     desks[18] = addDesk([.35, .32], .6, .7, .7)
     desks[19] = addDesk([.40, .32], .6, .7, .5)
-    desks[20] = addDesk([.12, .30], .4, .7, .5)
+    desks[20] = addDesk([.10, .25], .4, .7, .4)
     desks[21] = addDesk([.26, .27], .3, .8, .4)
     desks[22] = addDesk([.35, .27], .3, .8, .4)
     desks[23] = addDesk([.40, .27], .4, .8, .5)
@@ -68,7 +69,7 @@ def data():
     desks[25] = addDesk([.55, .17], .6, .8, .4)
     desks[26] = addDesk([.55, .11], .6, .8, .2)
     desks[27] = addDesk([.48, .40], .4, .4, .3)
-    desks[28] = addDesk([.10, .20], .3, .3, .3)
+    desks[28] = addDesk([.10, .20], .3, .6, .4)
 
     return [employees, desks, teams]
 
